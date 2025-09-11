@@ -1,0 +1,30 @@
+.boards-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;       /* take full width */
+  height: 100vh;     /* optional: center vertically */
+}
+
+.boards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: min(80vw, 600px);  /* responsive width */
+  aspect-ratio: 1 / 1;      /* keep square */
+  gap: 4px; /* The size of our grid lines */
+  background-color: black; /* The color of our grid lines */
+}
+
+.board-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;  /* keep each board square */
+  background-color: #f8f9fa; /* Cover the grid's black background. Match app-light bg. */
+}
+
+.app-dark .board-wrapper {
+  background-color: #121212; /* Match the dark mode background */
+}
+
+.app-dark .boards-grid {
+  background-color: gray; /* The color of our grid lines in dark mode */
+}
