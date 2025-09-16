@@ -30,6 +30,12 @@ export default function Home() {
       disabled: false,
     },
     {
+      title: "Flappy Bird",
+      description: "Endless side-scroller where a bird dodges pipes by flapping!",
+      path: "/flappy",
+      disabled: false,
+    },
+    {
       title: "Other Games",
       description: "More exciting games are on the way!",
       path: "/other",

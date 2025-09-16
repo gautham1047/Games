@@ -18,7 +18,7 @@ const GameCard: React.FC<GameCardProps> = ({
   darkMode,
 }) => {
   const cardClass = `card h-100 text-center game-card ${
-    darkMode ? "bg-dark text-white border-secondary" : "bg-light"
+    darkMode ? "bg-dark text-white border-secondarry" : "bg-light"
   } ${disabled ? "disabled" : ""}`;
 
   const btnClass = `btn ${
