@@ -2,6 +2,7 @@ import { useState } from "react";
 import Hands from "../components/Hands";
 import DarkModeToggle from "../components/DarkModeToggle";
 import "../styles/Sticks.css";
+import { useNavigate } from "react-router-dom";
 
 const Sticks = () => {
   const [players, setPlayers] = useState({
@@ -36,6 +37,7 @@ const Sticks = () => {
   const [isMultiplayer, setIsMultiplayer] = useState(false);
   const [playerSymbol, setPlayerSymbol] = useState<"top" | "bottom" | null>(null);
 
+  const navigate = useNavigate();
 
   const setPlayerHand = (
     player: "top" | "bottom",
@@ -453,6 +455,17 @@ const Sticks = () => {
                     value={rightMult}
                     onClick={() => setRightMult(!rightMult)}
                   />
+                </div>
+              </li>
+              <li>
+                <div
+                  className="dropdown-item"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    className={`${defaultBtnClass} w-100`}
+                    onClick={() => navigate("/home")}
+                  >Go Home</button>
                 </div>
               </li>
             </ul>

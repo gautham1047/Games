@@ -28,9 +28,7 @@ const App: React.FC = () => {
         (playerSymbol === "X" && xIsNext) || (playerSymbol === "O" && !xIsNext);
       if (!isPlayerTurn) return;
 
-
       console.log("Sending move to server:", index);
-
 
       socket.send(
         JSON.stringify({ type: "move", index, symbol: playerSymbol })
@@ -86,7 +84,9 @@ const App: React.FC = () => {
 
     ws.onopen = () => {
       console.log("Connected to server");
-      ws.send(JSON.stringify({ type: "join", room: "room1", gameType: "tictactoe" }));
+      ws.send(
+        JSON.stringify({ type: "join", room: "room1", gameType: "tictactoe" })
+      );
     };
 
     ws.onmessage = (event) => {
@@ -103,7 +103,7 @@ const App: React.FC = () => {
       }
 
       if (message.type === "updateBoard") {
-        console.log("board updated")
+        console.log("board updated");
         setSquares(message.squares);
         setXIsNext(message.xIsNext);
         setWinner(message.winner);
@@ -148,20 +148,25 @@ const App: React.FC = () => {
   return (
     <div className={appClass}>
       <div className="container py-4 position-relative d-flex flex-column align-items-center">
-        <div className="position-absolute" style={{ top: "1rem", right: "1rem" }}>
+        <div
+          className="position-absolute"
+          style={{ top: "1rem", right: "1rem" }}
+        >
           <DarkModeToggle darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
         </div>
 
         <h2 className="text-center mb-4">Tic Tac Toe</h2>
 
-        <Board
-          squares={squares}
-          onSquareClick={handleClick}
-          darkMode={darkMode}
-          winner={winner}
-          active={isActive}
-        />
-
+        <div style={{ width: "350px", height: "350px" }}>
+          <Board
+            squares={squares}
+            onSquareClick={handleClick}
+            darkMode={darkMode}
+            winner={winner}
+            active={isActive}
+          />
+        </div>
+        
         <button
           className={`${defaultBtnClass} mt-4`}
           onClick={toggleBoardClear}
