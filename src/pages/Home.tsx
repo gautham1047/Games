@@ -31,8 +31,14 @@ export default function Home() {
     },
     {
       title: "Flappy Bird",
-      description: "Endless side-scroller where a bird dodges pipes by flapping!",
+      description: "Endlessly dodge pipes by flapping!",
       path: "/flappy",
+      disabled: false,
+    },
+    {
+      title: "Snake",
+      description: "Guide a growing snake and don't die!",
+      path: "/snake",
       disabled: false,
     },
     {

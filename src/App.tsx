@@ -4,6 +4,7 @@ import TicTacToe from "./pages/TicTacToe";
 import Sticks from "./pages/Sticks";
 import Ultimate from "./pages/Ultimate";
 import Flappy from "./pages/Flappy";
+import Snake from "./pages/Snake";
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       <Route path="/ultimate" element={<Ultimate />} />
       <Route path="/sticks" element={<Sticks />} />
       <Route path="/flappy" element={<Flappy />} />
+      <Route path="/snake" element={<Snake />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

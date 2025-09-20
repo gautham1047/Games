@@ -187,6 +187,10 @@ const App = () => {
     function gameLoop() {
       if (!ctx) return;
 
+      console.log("start");
+      console.log(frameCount.current);
+      console.log(animationFrameId);
+      
       ctx.fillStyle = "skyblue";
       ctx.fillRect(0, 0, screenWidth, screenHeight);
 
