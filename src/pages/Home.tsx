@@ -42,6 +42,12 @@ export default function Home() {
       disabled: false,
     },
     {
+      title: "MineSweeper",
+      description: "Find the mines before they find you :)",
+      path: "/minesweeper",
+      disabled: false,
+    },
+    {
       title: "Other Games",
       description: "More exciting games are on the way!",
       path: "/other",

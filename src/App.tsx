@@ -5,6 +5,7 @@ import Sticks from "./pages/Sticks";
 import Ultimate from "./pages/Ultimate";
 import Flappy from "./pages/Flappy";
 import Snake from "./pages/Snake";
+import MineSweeper from "./pages/MineSweeper";
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
       <Route path="/sticks" element={<Sticks />} />
       <Route path="/flappy" element={<Flappy />} />
       <Route path="/snake" element={<Snake />} />
+      <Route path="/minesweeper" element={<MineSweeper />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

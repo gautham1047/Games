@@ -30,8 +30,8 @@ const App = () => {
   const gravity = 0.06;
   const jumpPower = -4;
 
-  const startScrollSpeed = 2;
-  const endScrollSpeed = 5;
+  const startScrollSpeed = 4;
+  const endScrollSpeed = 10;
   const rampUpRate = 0.025 / 60;
   const scrollSpace = 800;
 
@@ -186,10 +186,6 @@ const App = () => {
 
     function gameLoop() {
       if (!ctx) return;
-
-      console.log("start");
-      console.log(frameCount.current);
-      console.log(animationFrameId);
       
       ctx.fillStyle = "skyblue";
       ctx.fillRect(0, 0, screenWidth, screenHeight);

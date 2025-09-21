@@ -1,4 +1,6 @@
 import { useEffect, useState, useRef } from "react";
+import "../styles/App.css";
+import { useNavigate } from "react-router-dom";
 
 interface SnakeSegment {
   x: number;
@@ -27,6 +29,12 @@ function App() {
   const squareHeight = screenHeight / verticalSquares;
   const squareWidth = screenWidth / horizontalSquares;
 
+  const frameGap = 10; // Snake moves every 10 frames. Adjust for speed.
+
+  const [gameOver, setGameOver] = useState(false);
+
+  const navigate = useNavigate();
+
   function squarePos(x: number, y: number) {
     return [
       x * (screenWidth / horizontalSquares),
@@ -47,6 +55,21 @@ function App() {
     ctx.fillStyle = "red";
     const [x, y] = squarePos(apple.x, apple.y);
     ctx.fillRect(x, y, squareWidth, squareHeight);
+  }
+
+  function hitApple(snake : Snake, apple: Apple): boolean {
+    const head = snake.segments[0];
+    return head.x === apple.x && head.y === apple.y;
+  }
+
+  function hitWall(snake: Snake): boolean {
+    const head = snake.segments[0];
+    return head.x < 0 || head.x >= horizontalSquares || head.y < 0 || head.y >= verticalSquares;
+  }
+
+  function hitSelf(snake: Snake): boolean {
+    const head = snake.segments[0];
+    return snake.segments.slice(1).some(segment => segment.x === head.x && segment.y === head.y);
   }
 
   function moveSnake(snake: Snake): Snake {
@@ -82,17 +105,47 @@ function App() {
   function updateGameState(
     snake: Snake,
     apple: Apple,
+    frameCount: React.MutableRefObject<number>,
     ctx: CanvasRenderingContext2D
-  ): {snake : Snake, stillRunning : boolean} {
+  ): {snake : Snake, apple: Apple, stillRunning : boolean} {
+    if (frameCount.current % frameGap !== 0) {
+      drawSnake(snake, ctx);
+      drawApple(apple, ctx);
+      return { snake: snake, apple: apple, stillRunning: true };
+    }
+
     const newSnake = moveSnake(snake);
 
-    drawSnake(newSnake, ctx);
-    drawApple(apple, ctx);
+    if (hitWall(newSnake) || hitSelf(newSnake)) {
+      return { snake: newSnake, apple: apple, stillRunning: false };
+    }
 
-    return {snake : newSnake, stillRunning : true};
+    let newApple = apple;
+
+
+    if (hitApple(newSnake, apple)) {
+      // Grow snake by adding a new segment at the tail
+      const tail = newSnake.segments[newSnake.segments.length - 1];
+      newSnake.segments.push({ ...tail });
+
+      // Move apple to a new random position not occupied by the snake
+      do {
+        newApple = {
+          x: Math.floor(Math.random() * horizontalSquares),
+          y: Math.floor(Math.random() * verticalSquares),
+        };
+      } while (snake.segments.some((segment) => segment.x === newApple.x && segment.y === newApple.y));
+    }
+
+    drawSnake(newSnake, ctx);
+    drawApple(newApple, ctx);
+
+    return { snake: newSnake, apple: newApple, stillRunning: true };
   }
 
   useEffect(() => {
+    if (gameOver) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -113,19 +166,19 @@ function App() {
       switch (event.key) {
         case "a":
         case "ArrowLeft":
-          snake.direction = 0;
+          if (snake.direction !== 2) snake.direction = 0;
           break;
         case "w":
         case "ArrowUp":
-          snake.direction = 1;
+          if (snake.direction !== 3) snake.direction = 1;
           break;
         case "d":
         case "ArrowRight":
-          snake.direction = 2;
+          if (snake.direction !== 0) snake.direction = 2;
           break;
         case "s":
         case "ArrowDown":
-          snake.direction = 3;
+          if (snake.direction !== 1) snake.direction = 3;
           break;
       }
     }
@@ -134,6 +187,8 @@ function App() {
 
     let animationFrameId: number;
 
+    let frameCount = { current : 0};
+
     function gameLoop() {
       if (!ctx) return;
 
@@ -141,16 +196,23 @@ function App() {
       ctx.fillStyle = "mediumseagreen";
       ctx.fillRect(0, 0, screenWidth, screenHeight);
 
-      const result = updateGameState(snake, apple, ctx);
+      
+      const result = updateGameState(snake, apple, frameCount, ctx);
 
       snake = result.snake;
       stillRunning = result.stillRunning;
+      apple = result.apple;
 
       if (!stillRunning) {
+        setGameOver(true);
+        drawApple(apple, ctx);
+        drawSnake(snake, ctx);
+
         cancelAnimationFrame(animationFrameId);
         return;
       }
 
+      frameCount.current++;
       animationFrameId = requestAnimationFrame(gameLoop);
     }
 
@@ -160,9 +222,40 @@ function App() {
       window.removeEventListener("keydown", handleKeyDown);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [gameOver]);
 
-  return <canvas ref={canvasRef} style={{ display: "block" }} />;
+  return (
+    <div style={{ position: "relative" }}>
+      <canvas ref={canvasRef} style={{ display: "block" }} />
+      {gameOver && (
+        <div
+          style={{
+            position: "absolute",
+            top: "40%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            textAlign: "center",
+          }}
+        >
+          <h1>Game Over</h1>
+          <button
+            className="default-btn d-block mx-auto"
+            onClick={() => setGameOver(false)}
+            style={{ width: "150px", padding: "10px 20px", fontSize: "18px" }}
+          >
+            Restart
+          </button>
+          <button
+            className="default-btn d-block mx-auto mt-2"
+            onClick={() => navigate("/home")}
+            style={{ width: "150px", padding: "10px 20px", fontSize: "18px" }}
+          >
+            Go Home
+          </button>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default App;
