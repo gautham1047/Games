@@ -6,6 +6,7 @@ import Ultimate from "./pages/Ultimate";
 import Flappy from "./pages/Flappy";
 import Snake from "./pages/Snake";
 import MineSweeper from "./pages/MineSweeper";
+import TwentyFortyEight from "./pages/TwentyFortyEight";
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       <Route path="/flappy" element={<Flappy />} />
       <Route path="/snake" element={<Snake />} />
       <Route path="/minesweeper" element={<MineSweeper />} />
+      <Route path="/2048" element={<TwentyFortyEight />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

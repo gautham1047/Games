@@ -42,9 +42,15 @@ export default function Home() {
       disabled: false,
     },
     {
-      title: "MineSweeper",
+      title: "Mine Sweeper",
       description: "Find the mines before they find you :)",
       path: "/minesweeper",
+      disabled: false,
+    }, 
+    {
+      title: "2048",
+      description: "Combine tiles to reach 2048!",
+      path: "/2048",
       disabled: false,
     },
     {
