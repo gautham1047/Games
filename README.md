@@ -12,7 +12,7 @@
 
 ---
 
-## 🎮 Games Included
+## Games
 
 This arcade features a variety of games, each implemented as a separate React component.
 
@@ -85,7 +85,7 @@ Lints the project files for code quality and style issues.
 
 Runs a local server to preview the production build from the `dist` folder.
 
-## 📁 Project Structure
+## Project Structure
 
 The project is organized as follows:
 
@@ -102,10 +102,11 @@ src
 └── main.tsx        # Application entry point
 ```
 
-## 💡 Future Improvements
+## Future Improvements
 
 - Implement the backend for the multiplayer WebSocket connections.
 - Add more games to the collection.
+- Add computer bots to play against for games like Chess and Ultimate Tic-Tac-Toe
 - Add unit and integration tests for game logic.
 
 
