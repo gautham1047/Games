@@ -1,0 +1,126 @@
+.chess-page-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch; /* This will make the panel stretch to the board's height */
+  gap: 2rem;
+}
+
+.chessboard-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-panel {
+  width: 300px;
+  height: 644px; /* Match chessboard height + border */
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+}
+
+.app-light .game-panel {
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  color: #212529;
+}
+
+.app-dark .game-panel {
+  background-color: #2c3e50;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  color: #f8f9fa;
+}
+
+.game-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+.game-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.game-panel-body {
+  flex-grow: 1;
+}
+
+.turn-indicator {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+  text-align: center;
+}
+
+.turn-indicator.white-turn {
+  background-color: #f8f9fa; /* White */
+  color: #212529; /* Black */
+  border: 2px solid #495057;
+}
+
+.turn-indicator.black-turn {
+  background-color: #212529; /* Black */
+  color: #f8f9fa; /* White */
+  border: 2px solid #dee2e6;
+}
+
+.game-panel-footer {
+  margin-top: auto;
+}
+
+.game-over-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.game-over-box {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  animation: scaleUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.game-over-box h2 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.game-over-box p {
+  font-size: 1.25rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+}

@@ -1,0 +1,46 @@
+.chess-board {
+  display: grid;
+  /* Define 8 rows and 8 columns of a fixed size */
+  grid-template-columns: repeat(8, 80px);
+  grid-template-rows: repeat(8, 80px);
+  border: 8px solid #312e2b;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.chess-square {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chess-square.light {
+  background-color: #f0d9b5;
+}
+
+.chess-square.dark {
+  background-color: #b58863;
+}
+
+.chess-square img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain; /* Ensures the image scales down to fit */
+}
+
+.chess-square.selected {
+  /* A semi-transparent yellow overlay */
+  background-color: rgba(255, 255, 0, 0.7);
+}
+
+.chess-board .chess-square:hover {
+  cursor: pointer;
+  filter: brightness(1.2);
+}
+
+.chess-square.active {  /* Draw a dark grey, semi-transparent circle in the center */
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.3) 30%, transparent 32%);
+  background-repeat: no-repeat;
+  background-position: center;
+  box-shadow: none;
+}

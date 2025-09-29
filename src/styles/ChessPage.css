@@ -1,0 +1,82 @@
+.chess-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  gap: 2rem;
+  background: #faf8ef;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.chessboard-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem;
+  background: #eee4da;
+  border-radius: 10px;
+  box-shadow: 0 4px 24px #ddd;
+  text-align: center;
+}
+
+.game-panel-header {
+  margin-bottom: 1rem;
+}
+
+.game-title {
+  font-size: 4rem;
+  font-weight: bold;
+  margin: 0;
+  color: #776e65;
+}
+
+.turn-indicator {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #776e65;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background-color: #cdc1b4;
+  border-radius: 5px;
+}
+
+.game-panel-footer {
+  margin-top: auto;
+}
+
+.game-over-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(238, 228, 218, 0.73);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  border-radius: 6px;
+}
+
+.game-over-box {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  color: #776e65;
+}
+
+@media (min-width: 768px) {
+  .chess-page-container {
+    flex-direction: row;
+  }
+}
+

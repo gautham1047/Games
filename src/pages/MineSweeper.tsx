@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import "../styles/App.css";
+import "../styles/MineSweeper.css";
 import { useNavigate } from "react-router-dom";
 
 interface gridTile {
@@ -10,118 +11,121 @@ interface gridTile {
     y: number; // row index [0, verticalTiles - 1]
 }
 
-function App() {
+function MineSweeper() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-    const screenHeight = document.documentElement.clientHeight;
-    const screenWidth = document.documentElement.clientWidth;
 
     const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("easy");
 
     const [gameOver, setGameOver] = useState(false);
     const [win, setWin] = useState(false);
+    const [mineField, setMineField] = useState<gridTile[][]>([]);
 
     const navigate = useNavigate();
 
     const boardSizes = {
         easy: 8,
         medium: 16,
-        hard: 32,
+        hard: 24,
     }; // yields vertical tiles, horizontal tiles is double
 
     const verticalTiles = boardSizes[difficulty];
     const horizontalTiles = boardSizes[difficulty] * 2;
 
-    const tileHeight = screenHeight / boardSizes[difficulty];
-    const tileWidth = screenWidth / (boardSizes[difficulty] * 2);
+    // Calculate the best canvas size to fit the screen while maintaining a 2:1 aspect ratio
+    const availableWidth = document.documentElement.clientWidth * 0.95;
+    const availableHeight = document.documentElement.clientHeight * 0.95;
+
+    // Determine canvas size based on the limiting dimension
+    let canvasWidth = availableWidth;
+    let canvasHeight = availableWidth / 2;
+
+    if (canvasHeight > availableHeight) {
+        canvasHeight = availableHeight;
+        canvasWidth = availableHeight * 2;
+    }
+
+    const tileHeight = canvasHeight / verticalTiles;
+    const tileWidth = canvasWidth / horizontalTiles;
 
     const mineCounts = {
         easy: 12,
         medium: 48,
-        hard: 200,
+        hard: 99,
     };
 
-    let mineField : gridTile[][] = []; // -1 is mine, 0-8 is number of adjacent mines
-
-    for (let row = 0; row < verticalTiles; row++) {
-        mineField[row] = [];
-        for (let col = 0; col < horizontalTiles; col++) {
-            mineField[row][col] = {
-                revealed: false,
-                flagged: false,
-                value: 0,
-                x: col,
-                y: row
-            };
-        }
-    }
-
-    let minesPlaced = 0;
-    while (minesPlaced < mineCounts[difficulty]) {
-        const row = Math.floor(Math.random() * verticalTiles);
-        const col = Math.floor(Math.random() * horizontalTiles);
-
-        if (mineField[row][col].value === 0) {
-            mineField[row][col].value = -1;
-            minesPlaced++;
-        }
-    }
-
-    for (let row = 0; row < verticalTiles; row++) {
-        for (let col = 0; col < horizontalTiles; col++) {
-            if (mineField[row][col].value === -1) continue;
-            let count = 0;
-            for (let dr = -1; dr <= 1; dr++) {
-                for (let dc = -1; dc <= 1; dc++) {
-                    if (dr === 0 && dc === 0) continue; // skip self
-                    const r = row + dr;
-                    const c = col + dc;
-                    if (r < 0 || r >= verticalTiles || c < 0 || c >= horizontalTiles) continue;
-
-                    if (mineField[r][c].value === -1) count++;
-                }
+    const createBoard = () => {
+        let newMineField: gridTile[][] = [];
+        for (let row = 0; row < verticalTiles; row++) {
+            newMineField[row] = [];
+            for (let col = 0; col < horizontalTiles; col++) {
+                newMineField[row][col] = { revealed: false, flagged: false, value: 0, x: col, y: row };
             }
-            mineField[row][col].value = count;
         }
-    }
+
+        let minesPlaced = 0;
+        while (minesPlaced < mineCounts[difficulty]) {
+            const row = Math.floor(Math.random() * verticalTiles);
+            const col = Math.floor(Math.random() * horizontalTiles);
+            if (newMineField[row][col].value === 0) {
+                newMineField[row][col].value = -1;
+                minesPlaced++;
+            }
+        }
+
+        for (let row = 0; row < verticalTiles; row++) {
+            for (let col = 0; col < horizontalTiles; col++) {
+                if (newMineField[row][col].value === -1) continue;
+                let count = 0;
+                for (let dr = -1; dr <= 1; dr++) {
+                    for (let dc = -1; dc <= 1; dc++) {
+                        if (dr === 0 && dc === 0) continue;
+                        const r = row + dr;
+                        const c = col + dc;
+                        if (r < 0 || r >= verticalTiles || c < 0 || c >= horizontalTiles) continue;
+                        if (newMineField[r][c].value === -1) count++;
+                    }
+                }
+                newMineField[row][col].value = count;
+            }
+        }
+        setMineField(newMineField);
+        setGameOver(false);
+        setWin(false);
+    };
 
     function squarePos(tile: gridTile) : [number, number] {
-        return [
-            tile.x * (screenWidth / horizontalTiles),
-            tile.y * (screenHeight / verticalTiles),
-        ];
+        return [tile.x * tileWidth, tile.y * tileHeight];
     }
 
     const drawTile = (tile: gridTile, ctx : CanvasRenderingContext2D) => {
         const [x, y] = squarePos(tile);
 
-        ctx.fillStyle = tile.revealed ? "white" : "lightgray";
+        ctx.fillStyle = tile.revealed ? "#e3d9cf" : "#bfb3a7";
         ctx.fillRect(x, y, tileWidth, tileHeight);
 
-        ctx.strokeStyle = "black";
+        ctx.strokeStyle = "#9e9186";
         ctx.strokeRect(x, y, tileWidth, tileHeight);
 
         if (tile.flagged && !tile.revealed) {
-            ctx.fillStyle = "orange";
+            ctx.fillStyle = "#f2b179";
             ctx.beginPath();
             ctx.arc(x + tileWidth / 2, y + tileHeight / 2, Math.min(tileWidth, tileHeight) / 4, 0, 2 * Math.PI);
             ctx.fill();
         }
 
         if (tile.value > 0 && tile.revealed) {
-            ctx.fillStyle = "black";
-            ctx.font = "20px Arial";
+            ctx.fillStyle = "#776e65";
+            ctx.font = `bold ${Math.min(tileWidth, tileHeight) * 0.6}px Arial`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
             ctx.fillText(tile.value.toString(), x + tileWidth / 2, y + tileHeight / 2);
         }
 
         if (tile.value === -1 && tile.revealed) {
-            ctx.fillStyle = "red";
+            ctx.fillStyle = "#f65e3b";
             ctx.beginPath();
             ctx.arc(x + tileWidth / 2, y + tileHeight / 2, Math.min(tileWidth, tileHeight) / 4, 0, 2 * Math.PI);
             ctx.fill();
-
-            setGameOver(true);
-            console.log("Game Over!");
         }
 
     };
@@ -134,7 +138,7 @@ function App() {
             return null;
         }
 
-        return mineField[row][col];
+        return mineField[row]?.[col];
     }
 
     function revealTile(tile: gridTile) {
@@ -179,13 +183,14 @@ function App() {
 
 
     useEffect(() => {
-        if (gameOver) return;
+        createBoard();
+    }, [difficulty]);
+
+    useEffect(() => {
+        if (gameOver || !mineField.length) return;
 
         const canvas = canvasRef.current;
         if (!canvas) return;
-
-        canvas.width = screenWidth;
-        canvas.height = screenHeight;
 
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
@@ -196,14 +201,11 @@ function App() {
             const y = event.clientY - rect.top;
 
             const tile = tileAt(x, y);
-            console.log(tile);
             if (!tile) return;
 
             if (event.button === 0) {
-                console.log("Revealing tile", tile);
                 revealTile(tile);
             } else if (event.button === 1 || event.button === 2) {
-                console.log("Flagging tile", tile);
                 tile.flagged = !tile.flagged;
             }
 
@@ -214,13 +216,6 @@ function App() {
 
         canvas.addEventListener("mousedown", handleMouseDown);
         canvas.addEventListener("contextmenu", disableContextMenu);
-
-
-        for (let row = 0; row < verticalTiles; row++) {
-            for (let col = 0; col < horizontalTiles; col++) {
-                drawTile(mineField[row][col], ctx);
-            }
-        }
 
         let animationFrameId: number;
         
@@ -268,62 +263,50 @@ function App() {
             canvas.removeEventListener("contextmenu", disableContextMenu);
             cancelAnimationFrame(animationFrameId);
         };
-    }, [gameOver]);
+    }, [gameOver, mineField]);
 
     const winLoss = win ? "You Win!" : "You Lose!";
 
-    const gameOverOverlayStyle: React.CSSProperties = {
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      textAlign: "center",
-    };
-
-    const gameOverBoxStyle: React.CSSProperties = {
-      backgroundColor: "white",
-      padding: "2rem",
-      borderRadius: "8px",
-      border: "2px solid black",
-    };
-
-    const buttonStyle: React.CSSProperties = {
-      width: "150px",
-      padding: "10px 20px",
-      fontSize: "18px",
-    };
-
   return (
-    <div style={{ position: "relative" }}>
-      <canvas ref={canvasRef} style={{ display: "block" }} />
-      {gameOver && (
-        <div style={gameOverOverlayStyle}>
-          <div style={gameOverBoxStyle}>
-            <h1>Game Over: {winLoss}</h1>
+    <div className="minesweeper-page-container">
+      <div className="game-container">
+        <canvas 
+            ref={canvasRef} 
+            width={canvasWidth}
+            height={canvasHeight}
+            className="game-canvas"
+        />
+        {gameOver && (
+          <div className="game-over-overlay">
+            <div className="game-over-box">
+              <h2>{winLoss}</h2>
 
-            <div className="btn-group mt-3" role="group" aria-label="Difficulty settings" style={{ marginBottom: "1rem" }}>
-              <input type="radio" className="btn-check" name="difficulty" id="easy" autoComplete="off" checked={difficulty === 'easy'} onChange={() => setDifficulty('easy')} />
-              <label className="btn btn-outline-success" htmlFor="easy">Easy</label>
+              <div className="difficulty-controls mt-3 mb-3">
+                <div className="btn-group" role="group" aria-label="Difficulty settings">
+                  <input type="radio" className="btn-check" name="difficulty" id="easy" autoComplete="off" checked={difficulty === 'easy'} onChange={() => setDifficulty('easy')} />
+                  <label className="btn btn-outline-success" htmlFor="easy">Easy</label>
 
-              <input type="radio" className="btn-check" name="difficulty" id="medium" autoComplete="off" checked={difficulty === 'medium'} onChange={() => setDifficulty('medium')} />
-              <label className="btn btn-outline-warning" htmlFor="medium">Medium</label>
+                  <input type="radio" className="btn-check" name="difficulty" id="medium" autoComplete="off" checked={difficulty === 'medium'} onChange={() => setDifficulty('medium')} />
+                  <label className="btn btn-outline-warning" htmlFor="medium">Medium</label>
 
-              <input type="radio" className="btn-check" name="difficulty" id="hard" autoComplete="off" checked={difficulty === 'hard'} onChange={() => setDifficulty('hard')} />
-              <label className="btn btn-outline-danger" htmlFor="hard">Hard</label>
+                  <input type="radio" className="btn-check" name="difficulty" id="hard" autoComplete="off" checked={difficulty === 'hard'} onChange={() => setDifficulty('hard')} />
+                  <label className="btn btn-outline-danger" htmlFor="hard">Hard</label>
+                </div>
+              </div>
+
+              <button className="btn btn-primary w-100" onClick={createBoard}>
+                Restart
+              </button>
+
+              <button className="btn btn-secondary w-100 mt-2" onClick={() => navigate("/home")}>
+                Go Home
+              </button>
             </div>
-
-            <button className="default-btn d-block mx-auto" onClick={() => setGameOver(false)} style={buttonStyle}>
-              Restart
-            </button>
-
-            <button className="default-btn d-block mx-auto mt-2" onClick={() => navigate("/home")} style={buttonStyle}>
-              Go Home
-            </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
 
-export default App;
+export default MineSweeper;

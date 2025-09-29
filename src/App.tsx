@@ -4,10 +4,10 @@ import TicTacToe from "./pages/TicTacToe";
 import Sticks from "./pages/Sticks";
 import Ultimate from "./pages/Ultimate";
 import Flappy from "./pages/Flappy";
-import Snake from "./pages/Snake";
+import Snake from "./pages/Snake"; 
 import MineSweeper from "./pages/MineSweeper";
 import TwentyFortyEight from "./pages/TwentyFortyEight";
-
+import Chess from "./pages/Chess";
 
 function App() {
   return (
@@ -21,6 +21,7 @@ function App() {
       <Route path="/snake" element={<Snake />} />
       <Route path="/minesweeper" element={<MineSweeper />} />
       <Route path="/2048" element={<TwentyFortyEight />} />
+      <Route path ="/chess" element={<Chess />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

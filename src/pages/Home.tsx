@@ -52,6 +52,12 @@ export default function Home() {
       description: "Combine tiles to reach 2048!",
       path: "/2048",
       disabled: false,
+    }, 
+    {
+      title: "Chess",
+      description: "The classic game of strategy and skill.",
+      path: "/chess",
+      disabled: false,
     },
     {
       title: "Other Games",
