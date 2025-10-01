@@ -1,0 +1,14 @@
+.test-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  height: 100vh;
+  background: #f8f9fa;
+  color: black;
+}
+
+.test-page-container.dark {
+  background: #121212;
+  color: white;
+}

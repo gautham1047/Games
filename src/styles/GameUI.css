@@ -1,0 +1,92 @@
+.game-panel {
+  width: 475px;
+  display: flex;
+  /* Establish this as a container for container query units (cqi) */
+  container-type: inline-size;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+}
+
+.app-light .game-panel {
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  color: #212529;
+}
+
+.app-dark .game-panel {
+  background-color: #2c3e50;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  color: #f8f9fa;
+}
+
+.game-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+.game-title {
+  /* 
+    Use clamp() to create a responsive font size.
+    It will try to be 10% of the container's width (10cqi),
+    but won't go smaller than 1.5rem or larger than 2.5rem.
+  */
+  font-size: clamp(1.5rem, 10cqi, 2.5rem);
+  font-weight: bold;
+  margin: 0;
+}
+
+.game-panel-body {
+  flex-grow: 1;
+}
+
+.turn-indicator {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+  text-align: center;
+}
+
+/* 
+  These are example indicator styles from the Chess game.
+  They are included here so they can be reused or overridden by other games.
+*/
+.turn-indicator.white-turn {
+  background-color: #f8f9fa; /* White */
+  color: #212529; /* Black */
+  border: 2px solid #495057;
+}
+
+.turn-indicator.black-turn {
+  background-color: #212529; /* Black */
+  color: #f8f9fa; /* White */
+  border: 2px solid #dee2e6;
+}
+
+.game-panel-footer {
+  margin-top: auto;
+}
+
+/* Styles for multiplayer connection UI */
+.multiplayer-connect-ui {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* Spacing between input and button */
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--bs-border-color); /* Separator */
+}
+
+/* Adjustments for buttons within the multiplayer UI */
+.multiplayer-connect-ui .btn {
+  width: 100%; /* Make buttons full width in this section */
+}

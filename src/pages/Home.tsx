@@ -1,28 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import "../styles/App.css"; // Ensure this includes light/dark styles
 import DarkModeToggle from "../components/DarkModeToggle";
 import GameCard from "../components/GameCard";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Home() {
   const navigate = useNavigate();
-  const [darkMode, setDarkMode] = useState(false);
+  const { darkMode, toggleDarkMode } = useTheme();
 
   const appClass = darkMode ? "app-dark" : "app-light";
 
   const games = [
-    {
-      title: "Tic Tac Toe",
-      description: "The classic game of noughts and crosses.",
-      path: "/tictactoe",
-      disabled: false,
-    },
-    {
-      title: "Ultimate Tic Tac Toe",
-      description: "A strategic twist on the classic game.",
-      path: "/ultimate",
-      disabled: false,
-    },
     {
       title: "Sticks",
       description: "A simple game of strategy. Don't pick the last stick!",
@@ -58,6 +46,24 @@ export default function Home() {
       description: "The classic game of strategy and skill.",
       path: "/chess",
       disabled: false,
+    }, 
+    // {
+    //   title: "test",
+    //   description: "test",
+    //   path: "/test",
+    //   disabled: false,
+    // },
+    {
+      title: "Tic Tac Toe",
+      description: "The classic game of noughts and crosses.",
+      path: "/tictactoe",
+      disabled: true,
+    },
+    {
+      title: "Ultimate Tic Tac Toe",
+      description: "A strategic twist on the classic game.",
+      path: "/ultimate",
+      disabled: true,
     },
     {
       title: "Other Games",
@@ -70,11 +76,13 @@ export default function Home() {
   return (
     <div className={appClass} style={{ minHeight: "100vh" }}>
       <div className="container py-5 d-flex flex-column align-items-center">
-        <div className="position-absolute" style={{ top: "1rem", right: "1rem" }}>
-          <DarkModeToggle darkMode={darkMode} toggleDarkMode={() => setDarkMode(!darkMode)} />
+        <div className="dark-mode-toggle">
+          <DarkModeToggle />
         </div>
 
-        <h1 className="text-center mb-4 mt-3 display-4 fw-bold">Games</h1>
+        <h1 className={`text-center mb-4 mt-3 display-4 fw-bold ${darkMode ? 'gradient-text-dark' : 'gradient-text-light'}`}>
+          Games
+        </h1>
 
         <div className="row g-4 justify-content-center">
           {games.map((game) => (

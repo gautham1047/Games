@@ -2,22 +2,22 @@
 
 /* Page-level themes */
 .app-light {
-  background-color: #f8f9fa;
+  background: linear-gradient(180deg, #fdf6e3 0%, #fff 100%);
   color: #212529;
   min-height: 100vh;
 }
 
 .app-dark {
-  background-color: #121212;
+  background: linear-gradient(180deg, #0d1b2a 0%, #121212 100%);
   color: #f1f1f1;
   min-height: 100vh;
 }
 
 /* Toggle button in top right */
 .dark-mode-toggle {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
 }
 
 /* Default button styles */
@@ -28,4 +28,87 @@
   border-radius: 0.375rem;
   border-width: 2px;
   border-style: solid;
+}
+
+/* Gradient text for titles */
+.gradient-text-dark {
+  background: -webkit-linear-gradient(45deg, #007bff, #6610f2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Custom beige border for light mode cards */
+.border-beige {
+  border-color: #e9d8c4 !important;
+}
+
+/* Custom beige background for light mode cards */
+.card-bg-beige {
+  background-color: #fcf8f0;
+}
+
+/* Custom brown text color for beige theme */
+.text-brown {
+  color: #5c4033;
+}
+
+/* Custom beige button for light mode */
+.btn-beige {
+  --bs-btn-color: #a98467;
+  --bs-btn-border-color: #a98467;
+  --bs-btn-bg: transparent;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #a98467;
+  --bs-btn-hover-border-color: #a98467;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #937154;
+  --bs-btn-active-border-color: #876649;
+  --bs-btn-disabled-color: #a98467;
+  --bs-btn-disabled-border-color: #a98467;
+  font-weight: 500;
+}
+
+/* Custom darker beige button for board outlines */
+.btn-beige-darker {
+  --bs-btn-color: #a98467;
+  --bs-btn-border-color: #8f7a66; /* Darker beige for more contrast */
+  --bs-btn-bg: transparent;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #a98467;
+  --bs-btn-hover-border-color: #a98467;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #937154;
+  --bs-btn-active-border-color: #876649;
+  --bs-btn-disabled-color: #a98467;
+  --bs-btn-disabled-border-color: #a98467;
+  font-weight: 500;
+}
+
+/* Custom brown button for light mode */
+.btn-brown {
+  --bs-btn-color: #f9f6f2;
+  --bs-btn-bg: #8f7a66;
+  --bs-btn-border-color: #8f7a66;
+  --bs-btn-hover-color: #f9f6f2;
+  --bs-btn-hover-bg: #9f8b77;
+  --bs-btn-hover-border-color: #9f8b77;
+  --bs-btn-active-color: #f9f6f2;
+  --bs-btn-active-bg: #8f7a66;
+  --bs-btn-active-border-color: #8f7a66;
+  font-weight: bold;
+}
+
+/* Custom orange button for light mode */
+.btn-orange {
+  --bs-btn-color: #f9f6f2;
+  --bs-btn-bg: #f2b179;
+  --bs-btn-border-color: #f2b179;
+  --bs-btn-hover-color: #f9f6f2;
+  --bs-btn-hover-bg: #f59563;
+  --bs-btn-hover-border-color: #f59563;
+  --bs-btn-active-color: #f9f6f2;
+  --bs-btn-active-bg: #f2b179;
+  --bs-btn-active-border-color: #f2b179;
+  font-weight: bold;
 }

@@ -11,6 +11,11 @@ body {
     background: #faf8ef; /* Light, warm background like 2048 */
 }
 
+.minesweeper-page-container.dark {
+    background: #121212;
+}
+
+
 .game-container {
     position: relative;
     display: flex;
@@ -45,11 +50,21 @@ body {
     text-align: center;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
+.game-over-box.dark {
+    background-color: #2d2d2d;
+    border-color: #444;
+}
+
+
 
 .game-over-box h2 {
     font-size: 2rem;
     font-weight: bold;
     color: #776e65;
+}
+
+.game-over-box.dark h2 {
+    color: #f9f6f2;
 }
 
 .difficulty-controls {

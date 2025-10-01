@@ -20,8 +20,8 @@ const Board: React.FC<BoardProps> = ({
     darkMode ? "board-dark" : "board-light"
   }`;
   const buttonClass = darkMode
-    ? "btn btn-secondary"
-    : "btn btn-outline-primary";
+    ? "btn btn-outline-light"
+    : "btn btn-beige";
 
   // If winner exists, fill the board with winner's symbol
   const displaySquares = winner ? Array(9).fill(winner) : squares;

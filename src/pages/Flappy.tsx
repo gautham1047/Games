@@ -1,6 +1,8 @@
 import { useRef, useEffect, useState } from "react";
 import "../styles/Flappy.css";
 import "../styles/App.css";
+import GameOverCard from "../components/gameOverCard";
+import { useTheme } from "../context/ThemeContext";
 import { useNavigate } from "react-router-dom";
 
 interface Bird {
@@ -38,6 +40,7 @@ const App = () => {
   const [gameOver, setGameOver] = useState(false);
 
   const navigate = useNavigate();
+  const { darkMode } = useTheme();
 
   function drawBird(bird: Bird, ctx: CanvasRenderingContext2D) {
     ctx.fillStyle = "yellow";
@@ -232,33 +235,11 @@ const App = () => {
   return (
     <div style={{ position: "relative" }}>
       <canvas ref={canvasRef} style={{ display: "block" }} />
-      {gameOver && (
-        <div
-          style={{
-            position: "absolute",
-            top: "40%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            textAlign: "center",
-          }}
-        >
-          <h1>Game Over</h1>
-          <button
-            className="default-btn d-block mx-auto"
-            onClick={() => setGameOver(false)}
-            style={{ width: "150px", padding: "10px 20px", fontSize: "18px" }}
-          >
-            Restart
-          </button>
-          <button
-            className="default-btn d-block mx-auto mt-2"
-            onClick={() => navigate("/home")}
-            style={{ width: "150px", padding: "10px 20px", fontSize: "18px" }}
-          >
-            Go Home
-          </button>
-        </div>
-      )}
+      {gameOver && <GameOverCard
+        onRestart={() => setGameOver(false)}
+        onGoHome={() => navigate("/home")}
+        darkMode={darkMode}
+      />}
     </div>
   );
 };

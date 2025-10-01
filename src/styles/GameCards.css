@@ -1,5 +1,5 @@
 .card {
-  border-radius: 50%;
+  border-radius: 1rem; /* A more standard card shape */
   cursor: pointer;
 }
 
@@ -13,14 +13,13 @@
 
 .game-card:not(.disabled):hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(169, 132, 103, 0.2);
 }
 
 .app-dark .game-card:not(.disabled):hover {
-  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 25px rgba(58, 123, 213, 0.2);
 }
 
 .game-card.disabled {
   opacity: 0.6;
 }
-

@@ -18,17 +18,17 @@ const GameCard: React.FC<GameCardProps> = ({
   darkMode,
 }) => {
   const cardClass = `card h-100 text-center game-card ${
-    darkMode ? "bg-dark text-white border-secondarry" : "bg-light"
+    darkMode ? "bg-dark text-white border-secondary" : "card-bg-beige border-beige"
   } ${disabled ? "disabled" : ""}`;
 
   const btnClass = `btn ${
-    darkMode ? "btn-light" : "btn-dark"
+    darkMode ? "btn-outline-info" : "btn-outline-beige"
   } align-self-center d-flex align-items-center`;
 
   return (
     <div className={cardClass} onClick={!disabled ? onClick : undefined}>
-      <div className="card-body d-flex flex-column">
-        <h5 className="card-title fw-bold">{title}</h5>
+      <div className={`card-body d-flex flex-column ${!darkMode ? "text-brown" : ""}`}>
+        <h5 className="card-title fw-bold ">{title}</h5>
         <p className="card-text flex-grow-1">{description}</p>
         <button
           onClick={onClick}

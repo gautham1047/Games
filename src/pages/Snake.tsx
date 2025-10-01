@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import "../styles/App.css";
+import { useTheme } from "../context/ThemeContext";
+import GameOverCard from "../components/gameOverCard";
 import { useNavigate } from "react-router-dom";
 
 interface SnakeSegment {
@@ -34,6 +36,7 @@ function App() {
   const [gameOver, setGameOver] = useState(false);
 
   const navigate = useNavigate();
+  const { darkMode } = useTheme();
 
   function squarePos(x: number, y: number) {
     return [
@@ -44,7 +47,7 @@ function App() {
 
   function drawSnake(snake: Snake, ctx: CanvasRenderingContext2D) {
     ctx.fillStyle = "green";
-    let segments = snake.segments;
+    const segments = snake.segments;
     segments.forEach((segment) => {
       const [x, y] = squarePos(segment.x, segment.y);
       ctx.fillRect(x, y, squareWidth, squareHeight);
@@ -187,7 +190,7 @@ function App() {
 
     let animationFrameId: number;
 
-    let frameCount = { current : 0};
+    const frameCount = { current : 0};
 
     function gameLoop() {
       if (!ctx) return;
@@ -227,33 +230,11 @@ function App() {
   return (
     <div style={{ position: "relative" }}>
       <canvas ref={canvasRef} style={{ display: "block" }} />
-      {gameOver && (
-        <div
-          style={{
-            position: "absolute",
-            top: "40%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            textAlign: "center",
-          }}
-        >
-          <h1>Game Over</h1>
-          <button
-            className="default-btn d-block mx-auto"
-            onClick={() => setGameOver(false)}
-            style={{ width: "150px", padding: "10px 20px", fontSize: "18px" }}
-          >
-            Restart
-          </button>
-          <button
-            className="default-btn d-block mx-auto mt-2"
-            onClick={() => navigate("/home")}
-            style={{ width: "150px", padding: "10px 20px", fontSize: "18px" }}
-          >
-            Go Home
-          </button>
-        </div>
-      )}
+      {gameOver && <GameOverCard
+        onRestart={() => setGameOver(false)}
+        onGoHome={() => navigate("/home")}
+        darkMode={darkMode}
+      />}
     </div>
   );
 }

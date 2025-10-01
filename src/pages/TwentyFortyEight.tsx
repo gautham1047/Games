@@ -61,7 +61,7 @@ function TwentyFourtyEight() {
 
   const drawTile = (tile: Tile, ctx: CanvasRenderingContext2D) => {
     ctx.fillStyle = (tile.value > 2048) ? "#6b5405" : colors[tile.value] || "#3c3a32";
-    let [x, y] = squarePos(tile.x, tile.y);
+    const [x, y] = squarePos(tile.x, tile.y);
     ctx.fillRect(x, y, tileSize, tileSize);
 
     ctx.strokeStyle = "#bbada0";
@@ -87,7 +87,7 @@ function TwentyFourtyEight() {
   };
 
 function spawnRandomTileOnBoard(board: Tile[][], numTiles: number) {
-  let emptyTiles: Tile[] = [];
+  const emptyTiles: Tile[] = [];
   for (let i = 0; i < numTiles; i++) {
     for (let j = 0; j < numTiles; j++) {
       if (board[i][j].value === 0) {

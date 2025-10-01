@@ -1,0 +1,67 @@
+.game-over-card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.game-over-card {
+    padding: 2rem 3rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    border: 1px solid;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Light Mode */
+.game-over-card.light {
+    background-color: #fcf8f0; /* beige */
+    border-color: #e9d8c4;
+    color: #5c4033; /* brown */
+}
+
+.game-over-card.light h1 {
+    color: #776e65;
+}
+
+.game-over-card.light .btn-game-over {
+    background-color: #a98467;
+    color: white;
+}
+
+/* Dark Mode */
+.game-over-card.dark {
+    background-color: #2c3e50;
+    border-color: #34495e;
+    color: #ecf0f1;
+}
+
+.game-over-card.dark h1 {
+    color: white;
+}
+
+.game-over-card.dark .btn-game-over {
+    background-color: #3498db;
+    color: white;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.difficulty-controls {
+    display: flex;
+    justify-content: center;
+}
+
+.btn-group {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}

@@ -4,12 +4,13 @@ import "../styles/App.css";
 import "../styles/Chess.css";
 import { useNavigate } from "react-router-dom";
 import type { Piece, Board } from "../assets/chess";
-import DarkModeToggle from "../components/DarkModeToggle";
 import { chessPieces } from "../assets/chessPieces";
+import { useTheme } from "../context/ThemeContext";
+import GameUI from "../components/gameUI";
+import type { Button, Indicator } from "../components/gameUI";
 
 function ChessPage() {
   const navigate = useNavigate();
-  const [darkMode, setDarkMode] = useState(false);
   const [board, setBoard] = useState<Board>([]);
   const [selectedPiece, setSelectedPiece] = useState<[number, number] | null>(null);
   const [possibleMoves, setPossibleMoves] = useState<[number, number][]>([]);
@@ -17,6 +18,8 @@ function ChessPage() {
   const [checkMate, setCheckMate] = useState(false);
   const [enPassantTarget, setEnPassantTarget] = useState<[number, number] | null>(null);
   const [promotionSquare, setPromotionSquare] = useState<[number, number] | null>(null);
+
+  const { darkMode } = useTheme();
 
   const kingMoved = useRef(false);
   const castlingSide = useRef<"kingside" | "queenside" | null>(null);
@@ -51,8 +54,6 @@ function ChessPage() {
     }
     setBoard(initialBoard);
   }, []);
-
-  const toggleDarkMode = () => setDarkMode(!darkMode);
 
   const canCapture = (from: Piece, to: [number, number] | null): boolean => {
     if (to === null) return false;
@@ -464,9 +465,26 @@ function ChessPage() {
 
       setBoard(newBoard);
       setPromotionSquare(null);
-      setTurn(turn === "w" ? "b" : "w"); // Now switch turns
+      setTurn(turn === "w" ? "b" : "w");
     }
   };
+
+  const gameIndicators: Indicator[] = [
+    {
+      label: "Turn",
+      value: turn === "w" ? "White" : "Black",
+      className: turn === "w" ? "white-turn" : "black-turn",
+    },
+  ];
+
+  const gameButtons: Button[] = [
+    {
+      text: "Reset Game",
+      onClick: resetGame,
+      className: darkMode ? "btn-light" : "btn-dark",
+    },
+    { text: "Go Home", onClick: () => navigate("/home"), className: "btn-secondary" },
+  ];
 
   return (
     <div className={`chess-page-container ${darkMode ? "app-dark" : "app-light"}`}>
@@ -506,26 +524,7 @@ function ChessPage() {
             </div>
           )}
         </div>
-        <div className="game-panel">
-          <div className="game-panel-header">
-            <h1 className="game-title">Chess</h1>
-            <DarkModeToggle darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-          </div>
-          <div className="game-panel-body">
-            <div className={`turn-indicator ${turn === "w" ? "white-turn" : "black-turn"}`}>
-              Turn: {turn === "w" ? "White" : "Black"}
-            </div>
-          </div>
-          <div className="game-panel-footer">
-            <button className={`btn ${darkMode ? "btn-light" : "btn-dark"} w-100`} onClick={resetGame}>
-              Reset Game
-            </button>
-            <button className="btn btn-secondary w-100 mt-2" onClick={() => navigate("/home")}
-            >
-              Go Home
-            </button>
-          </div>
-        </div>
+        <GameUI title="Chess" indicators={gameIndicators} buttons={gameButtons} />
       </div>
     </div>
   );

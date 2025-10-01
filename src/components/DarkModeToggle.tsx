@@ -1,26 +1,16 @@
 import React from "react";
+import { useTheme } from "../context/ThemeContext";
 import "../styles/DarkModeToggle.css";
-import { BsSunFill, BsMoonFill } from "react-icons/bs";
+import { FaSun, FaMoon } from "react-icons/fa";
 
-type DarkModeToggleProps = {
-  darkMode: boolean;
-  toggleDarkMode: () => void;
-};
-
-const DarkModeToggle: React.FC<DarkModeToggleProps> = ({ darkMode, toggleDarkMode }) => {
-  const containerClasses = `dark-mode-toggle-container ${darkMode ? "dark" : ""}`;
-  const switchClasses = `toggle-switch ${darkMode ? "dark" : "light"}`;
+const DarkModeToggle: React.FC = () => {
+  const { darkMode, toggleDarkMode } = useTheme();
 
   return (
-    <button
-      className={containerClasses}
-      onClick={toggleDarkMode}
-      aria-pressed={darkMode}
-      aria-label="Toggle dark mode"
-    >
-      <div className={switchClasses}>
-        <BsSunFill className="sun" />
-        <BsMoonFill className="moon" />
+    <button onClick={toggleDarkMode} className={`dark-mode-toggle-container ${darkMode ? "dark" : ""}`} aria-label="Toggle dark mode">
+      <div className={`toggle-switch ${darkMode ? "dark" : "light"}`}>
+        <FaSun className="sun" />
+        <FaMoon className="moon" />
       </div>
     </button>
   );

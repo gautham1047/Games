@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import "../styles/App.css";
 import "../styles/MineSweeper.css";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
+import GameOverCard from "../components/gameOverCard";
+import DarkModeToggle from "../components/DarkModeToggle";
 
 interface gridTile {
     revealed: boolean;
@@ -16,6 +19,7 @@ function MineSweeper() {
 
     const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("easy");
 
+    const { darkMode } = useTheme();
     const [gameOver, setGameOver] = useState(false);
     const [win, setWin] = useState(false);
     const [mineField, setMineField] = useState<gridTile[][]>([]);
@@ -54,7 +58,7 @@ function MineSweeper() {
     };
 
     const createBoard = () => {
-        let newMineField: gridTile[][] = [];
+        const newMineField: gridTile[][] = [];
         for (let row = 0; row < verticalTiles; row++) {
             newMineField[row] = [];
             for (let col = 0; col < horizontalTiles; col++) {
@@ -97,13 +101,13 @@ function MineSweeper() {
         return [tile.x * tileWidth, tile.y * tileHeight];
     }
 
-    const drawTile = (tile: gridTile, ctx : CanvasRenderingContext2D) => {
+    const drawTile = (tile: gridTile, ctx : CanvasRenderingContext2D, darkMode: boolean) => {
         const [x, y] = squarePos(tile);
 
-        ctx.fillStyle = tile.revealed ? "#e3d9cf" : "#bfb3a7";
+        ctx.fillStyle = tile.revealed ? (darkMode ? "#2d2d2d" : "#e3d9cf") : (darkMode ? "#444" : "#bfb3a7");
         ctx.fillRect(x, y, tileWidth, tileHeight);
 
-        ctx.strokeStyle = "#9e9186";
+        ctx.strokeStyle = darkMode ? "#121212" : "#9e9186";
         ctx.strokeRect(x, y, tileWidth, tileHeight);
 
         if (tile.flagged && !tile.revealed) {
@@ -114,7 +118,7 @@ function MineSweeper() {
         }
 
         if (tile.value > 0 && tile.revealed) {
-            ctx.fillStyle = "#776e65";
+            ctx.fillStyle = darkMode ? "#f9f6f2" : "#776e65";
             ctx.font = `bold ${Math.min(tileWidth, tileHeight) * 0.6}px Arial`;
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
@@ -224,7 +228,7 @@ function MineSweeper() {
 
             for (let row = 0; row < verticalTiles; row++) {
                 for (let col = 0; col < horizontalTiles; col++) {
-                    drawTile(mineField[row][col], ctx);
+                    drawTile(mineField[row][col], ctx, darkMode);
                 }
             }
 
@@ -263,12 +267,14 @@ function MineSweeper() {
             canvas.removeEventListener("contextmenu", disableContextMenu);
             cancelAnimationFrame(animationFrameId);
         };
-    }, [gameOver, mineField]);
-
-    const winLoss = win ? "You Win!" : "You Lose!";
+    }, [gameOver, mineField, darkMode]);
 
   return (
-    <div className="minesweeper-page-container">
+    <div className={`minesweeper-page-container ${darkMode ? "dark" : ""}`}>
+      <div className="position-absolute" style={{ top: "1rem", right: "1rem", zIndex: 1001 }}>
+        <DarkModeToggle />
+      </div>
+
       <div className="game-container">
         <canvas 
             ref={canvasRef} 
@@ -276,34 +282,21 @@ function MineSweeper() {
             height={canvasHeight}
             className="game-canvas"
         />
-        {gameOver && (
-          <div className="game-over-overlay">
-            <div className="game-over-box">
-              <h2>{winLoss}</h2>
-
-              <div className="difficulty-controls mt-3 mb-3">
-                <div className="btn-group" role="group" aria-label="Difficulty settings">
-                  <input type="radio" className="btn-check" name="difficulty" id="easy" autoComplete="off" checked={difficulty === 'easy'} onChange={() => setDifficulty('easy')} />
-                  <label className="btn btn-outline-success" htmlFor="easy">Easy</label>
-
-                  <input type="radio" className="btn-check" name="difficulty" id="medium" autoComplete="off" checked={difficulty === 'medium'} onChange={() => setDifficulty('medium')} />
-                  <label className="btn btn-outline-warning" htmlFor="medium">Medium</label>
-
-                  <input type="radio" className="btn-check" name="difficulty" id="hard" autoComplete="off" checked={difficulty === 'hard'} onChange={() => setDifficulty('hard')} />
-                  <label className="btn btn-outline-danger" htmlFor="hard">Hard</label>
-                </div>
-              </div>
-
-              <button className="btn btn-primary w-100" onClick={createBoard}>
-                Restart
-              </button>
-
-              <button className="btn btn-secondary w-100 mt-2" onClick={() => navigate("/home")}>
-                Go Home
-              </button>
-            </div>
-          </div>
-        )}
+        {gameOver && 
+          <GameOverCard
+            title={win ? "You Win!" : "You Lose!"}
+            onRestart={createBoard}
+            onGoHome={() => navigate("/home")}
+            darkMode={darkMode}
+            currentDifficulty={difficulty}
+            onDifficultyChange={(newDifficulty) => setDifficulty(newDifficulty as "easy" | "medium" | "hard")}
+            difficultyOptions={[
+              { label: "Easy", value: "easy", colorClass: "btn-outline-success" },
+              { label: "Medium", value: "medium", colorClass: "btn-outline-warning" },
+              { label: "Hard", value: "hard", colorClass: "btn-outline-danger" },
+            ]}
+          />
+        }
       </div>
     </div>
   );

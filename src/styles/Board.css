@@ -7,7 +7,7 @@
 }
 
 .board-light {
-  background-color: #ffffff;
+  background-color: #fff;
   color: #000000;
 }
 
@@ -18,7 +18,7 @@
 
 .cell-button {
   width: 100%;
-  aspect-ratio: 1 / 1; /* This is the key fix */
+  aspect-ratio: 1 / 1;
   font-size: clamp(0.8rem, 2vw, 1.75rem);
   display: flex;
   align-items: center;
@@ -33,4 +33,10 @@
 .inactive {
   opacity: 0.6;
   transition: opacity 0.3s ease;
+}
+
+.btn-beige {
+  border: 2px solid #888 !important; /* or any color that stands out on white */
+  background-color: #f5f5dc;
+  color: #222;
 }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Hands from "../components/Hands";
 import DarkModeToggle from "../components/DarkModeToggle";
 import "../styles/Sticks.css";
+import { useTheme } from "../context/ThemeContext";
 import { useNavigate } from "react-router-dom";
 
 const Sticks = () => {
@@ -13,7 +14,7 @@ const Sticks = () => {
   const [useBase, setUseBase] = useState(false);
   const [leftMult, setLeftMult] = useState(false);
   const [rightMult, setRightMult] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const { darkMode } = useTheme();
 
   // 0 = inactive, -1 = left active, 1 = right active
   const [currentPlayer, setCurrentPlayer] = useState<"top" | "bottom">(
@@ -387,7 +388,7 @@ const Sticks = () => {
       >
         <div className="d-flex justify-content-end gap-2">
           {/* Dark Mode Toggle */}
-          <DarkModeToggle darkMode={darkMode} toggleDarkMode={() => setDarkMode(!darkMode)} />
+          <DarkModeToggle />
           {/* Settings Dropdown */}
           <div className="dropdown">
             <button

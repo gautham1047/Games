@@ -4,8 +4,9 @@ import "../styles/App.css";
 import "../styles/Ultimate.css";
 import DarkModeToggle from "../components/DarkModeToggle";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 
-const App: React.FC = () => {
+const Ultimate = () => {
   const [allSquares, setAllSquares] = useState<(string | null)[][]>(
     Array.from({ length: 9 }, () => Array(9).fill(null))
   );
@@ -15,15 +16,14 @@ const App: React.FC = () => {
     Array(9).fill(null)
   );
 
-  const [darkMode, setDarkMode] = useState(false);
+  const { darkMode } = useTheme();
+
   const toggleBoardClear = () => {
     setAllSquares(Array.from({ length: 9 }, () => Array(9).fill(null))); // ✅ fresh arrays
     setXIsNext(false);
     setFullSquares(Array(9).fill(null));
     setActiveSquare(null);
   };
-
-  const toggleDarkMode = () => setDarkMode(!darkMode);
 
   const handleClick = (boardIndex: number, squareIndex: number) => {
     // If the board is not the active one (and it's not the very first move), do nothing
@@ -107,7 +107,7 @@ const App: React.FC = () => {
           className="position-absolute"
           style={{ top: "1rem", right: "1rem" }}
         >
-          <DarkModeToggle darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+          <DarkModeToggle />
         </div>
 
         <h2 className="text-center mb-4">Ultimate Tic Tac Toe</h2>
@@ -148,4 +148,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Ultimate;

@@ -4,14 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import GameUI from "../components/gameUI";
 import type { Button, Indicator } from "../components/gameUI";
+import "../styles/Test.css";
 
-const TicTacToe = () => {
+const test = () => {
   const [squares, setSquares] = useState<(string | null)[]>(
     Array(9).fill(null)
   );
   const [xIsNext, setXIsNext] = useState(true);
   const [winner, setWinner] = useState<string | null>(null);
-  const [showJoinField, setShowJoinField] = useState(false);
+  const [showMultiplayerConnectUI, setShowMultiplayerConnectUI] = useState(false); // New state for multiplayer UI visibility
   const [serverCode, setServerCode] = useState("");
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [isMultiplayer, setIsMultiplayer] = useState(false);
@@ -147,6 +148,13 @@ const TicTacToe = () => {
     },
   ];
 
+  const toggleMultiplayerConnectUI = () => {
+    setShowMultiplayerConnectUI((prev) => !prev);
+    // Optionally reset serverCode if the UI is being hidden
+    if (showMultiplayerConnectUI) {
+      setServerCode("");
+    }
+  };
   const gameButtons: Button[] = [
     {
       text: "Clear Board",
@@ -158,47 +166,56 @@ const TicTacToe = () => {
       onClick: () => navigate("/home"),
       className: darkMode ? "btn-outline-light" : "btn-brown",
     },
+    {
+      text: showMultiplayerConnectUI ? "Hide Multiplayer" : "Join Multiplayer",
+      onClick: toggleMultiplayerConnectUI,
+      className: darkMode ? "btn-info" : "btn-primary", // Example styling
+    },
   ];
+
+  const multiplayerConnectUI = showMultiplayerConnectUI ? (
+    <div className="multiplayer-connect-ui mt-3">
+      <input
+        type="text"
+        className={`form-control mb-2 ${darkMode ? "bg-dark text-light border-secondary" : ""}`}
+        placeholder="Server Code (e.g., localhost:8080)"
+        value={serverCode}
+        onChange={(e) => setServerCode(e.target.value)}
+      />
+      <button
+        onClick={handleJoinServer}
+        className={`btn ${darkMode ? "btn-success" : "btn-primary"}`}
+        disabled={!serverCode} // Disable if serverCode is empty
+      >
+        Connect to Server
+      </button>
+    </div>
+  ) : null;
 
   const isLandscape =
     document.documentElement.clientWidth >= document.documentElement.clientHeight;
 
   return (
-    <div className={`tictactoe-page-container ${isLandscape ? "landscape" : "portrait"} ${darkMode ? "dark" : ""}`}>
-      <div className="tictactoe-board-wrapper">
-        <Board squares={squares} onSquareClick={handleClick} darkMode={darkMode} winner={winner} active={isActive}/>
+    <div
+      className={`test-page-container${darkMode ? " dark" : ""}`}
+    >
+      <div className="test-board-container">
+        <Board
+          squares={squares}
+          onSquareClick={handleClick}
+          darkMode={darkMode}
+          winner={winner}
+          active={isActive}
+        />
       </div>
-
       <GameUI
-        title="Tic Tac Toe"
+        title="Tic-Tac-Toe"
         indicators={gameIndicators}
         buttons={gameButtons}
-        additionalContent={
-          !showJoinField ? (
-            <button
-              className={`btn ${darkMode ? "btn-primary" : "btn-brown"} w-100 mt-3`}
-              onClick={() => setShowJoinField(true)}
-            >
-              Join Multiplayer Server
-            </button>
-          ) : (
-            <div className="d-flex flex-column align-items-center w-100 gap-2 mt-3">
-              <input
-                type="text"
-                value={serverCode}
-                onChange={(e) => setServerCode(e.target.value)}
-                placeholder="Enter server address"
-                className="form-control"
-              />
-              <button className={`btn ${darkMode ? "btn-primary" : "btn-brown"} w-100`} onClick={handleJoinServer}>
-                Connect
-              </button>
-            </div>
-          )
-        }
+        additionalContent={multiplayerConnectUI}
       />
     </div>
   );
-};
+}
 
-export default TicTacToe;
+export default test;
