@@ -60,13 +60,13 @@
   These are example indicator styles from the Chess game.
   They are included here so they can be reused or overridden by other games.
 */
-.turn-indicator.white-turn {
+.turn-indicator.white-turn, .turn-indicator.bottom-turn {
   background-color: #f8f9fa; /* White */
   color: #212529; /* Black */
   border: 2px solid #495057;
 }
 
-.turn-indicator.black-turn {
+.turn-indicator.black-turn, .turn-indicator.top-turn {
   background-color: #212529; /* Black */
   color: #f8f9fa; /* White */
   border: 2px solid #dee2e6;

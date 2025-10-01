@@ -12,12 +12,6 @@ export default function Home() {
 
   const games = [
     {
-      title: "Sticks",
-      description: "A simple game of strategy. Don't pick the last stick!",
-      path: "/sticks",
-      disabled: false,
-    },
-    {
       title: "Flappy Bird",
       description: "Endlessly dodge pipes by flapping!",
       path: "/flappy",
@@ -46,7 +40,13 @@ export default function Home() {
       description: "The classic game of strategy and skill.",
       path: "/chess",
       disabled: false,
-    }, 
+    },     
+    {
+      title: "Sticks",
+      description: "A simple game of strategy. Don't pick the last stick!",
+      path: "/sticks",
+      disabled: false,
+    },
     // {
     //   title: "test",
     //   description: "test",

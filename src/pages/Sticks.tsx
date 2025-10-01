@@ -4,6 +4,8 @@ import DarkModeToggle from "../components/DarkModeToggle";
 import "../styles/Sticks.css";
 import { useTheme } from "../context/ThemeContext";
 import { useNavigate } from "react-router-dom";
+import GameUI from "../components/gameUI";
+import type { Button, Indicator } from "../components/gameUI";
 
 const Sticks = () => {
   const [players, setPlayers] = useState({
@@ -214,13 +216,13 @@ const Sticks = () => {
     value,
     onClick,
   }: {
-    label: string;
+    label: React.ReactNode;
     value: boolean;
     onClick: () => void;
   }) => (
-    <div className="mb-0">
+    <div className="d-flex align-items-center">
       <button
-        className={`btn ${
+        className={`btn w-100 ${
           value
             ? darkMode
               ? "btn-success"
@@ -244,17 +246,15 @@ const Sticks = () => {
     min,
     max,
   }: {
-    label: string;
+    label: React.ReactNode;
     value: number;
     setValue: (v: number) => void;
     min: number;
     max: number;
   }) => (
-    <div className="mb-0">
-      <label
-        className={`form-label me-2 ${darkMode ? "text-light" : "text-dark"}`}
-      >
-        {label}:
+    <div className="d-flex align-items-center justify-content-between">
+      <label className={`form-label mb-0 ${darkMode ? "text-light" : "text-dark"}`}>
+        {label}
       </label>
       <input
         type="number"
@@ -263,7 +263,7 @@ const Sticks = () => {
         value={value}
         onChange={(e) => setValue(parseInt(e.target.value))}
         className={`form-control ${darkMode ? "bg-dark text-light" : ""}`}
-        style={{ width: "70px" }}
+        style={{ width: "80px" }}
       />
     </div>
   );
@@ -376,147 +376,95 @@ const Sticks = () => {
     darkMode ? "btn-outline-light" : "btn-outline-dark"
   } default-btn d-block ms-auto me-2`;
 
+  const gameIndicators: Indicator[] = [
+    {
+      label: "Turn",
+      value: isMultiplayer
+        ? playerSymbol === currentPlayer
+          ? "Your Turn"
+          : "Opponent's Turn"
+        : currentPlayer === "bottom" ? "P1" : "P2",
+      className: isMultiplayer
+        ? playerSymbol === currentPlayer
+          ? "bottom-turn"
+          : "top-turn"
+        : currentPlayer === "bottom"
+        ? "bottom-turn"
+        : "top-turn",
+    },
+  ];
+
+  const toggleMultiplayerUI = () => {
+    if (isMultiplayer) {
+      handleLeaveRoom();
+    } else {
+      setShowJoinField(prev => !prev);
+    }
+  };
+
+  const gameButtons: Button[] = [
+    {
+      text: "Reset Game",
+      onClick: resetGame,
+      className: darkMode ? "btn-warning" : "btn-orange",
+    },
+    {
+      text: "Go Home",
+      onClick: () => navigate("/home"),
+      className: darkMode ? "btn-outline-light" : "btn-brown",
+    },
+    {
+      text: isMultiplayer ? "Leave Room" : (showJoinField ? "Cancel Join" : "Join Multiplayer"),
+      onClick: toggleMultiplayerUI,
+      className: darkMode ? "btn-info" : "btn-primary",
+    },
+  ];
+
+  const additionalContent = (
+    <div className="d-flex flex-column gap-2 mt-3">
+      <ToggleButton
+        label="Use Base"
+        value={useBase}
+        onClick={() => setUseBase(!useBase)}
+      />
+      <NumberInput
+        label="Base:"
+        value={base}
+        setValue={setBase}
+        min={2}
+        max={6}
+      />
+      <ToggleButton
+        label="Left Mult"
+        value={leftMult}
+        onClick={() => setLeftMult(!leftMult)}
+      />
+      <ToggleButton
+        label="Right Mult"
+        value={rightMult}
+        onClick={() => setRightMult(!rightMult)}
+      />
+    </div>
+  );
+
+  const multiplayerContent = showJoinField && !isMultiplayer ? (
+    <div className="d-flex flex-column align-items-center w-100 gap-2 mt-3">
+      <input
+        type="text"
+        value={serverCode}
+        onChange={(e) => setServerCode(e.target.value)}
+        placeholder="Enter server address"
+        className={`form-control ${darkMode ? "bg-dark text-light" : ""}`}
+      />
+      <button className={`btn ${darkMode ? "btn-success" : "btn-primary"} w-100`} onClick={handleJoinServer}>
+        Connect
+      </button>
+    </div>
+  ) : null;
+
   return (
-    <div
-      className={`d-flex flex-column justify-content-between align-items-center ${containerClass}`}
-      style={{ height: "100vh", position: "relative" }}
-    >
-      {/* Dark mode toggle and settings dropdown */}
-      <div
-        className="position-fixed"
-        style={{ top: "1rem", right: "1rem", zIndex: 1000, width: "300px" }}
-      >
-        <div className="d-flex justify-content-end gap-2">
-          {/* Dark Mode Toggle */}
-          <DarkModeToggle />
-          {/* Settings Dropdown */}
-          <div className="dropdown">
-            <button
-              className={defaultBtnClass}
-              type="button"
-              id="settingsDropdown"
-              data-bs-toggle="dropdown"
-              disabled={isMultiplayer}
-              aria-expanded="false"
-            >
-              Settings
-            </button>
-            <ul
-              className={`dropdown-menu dropdown-menu-end ${
-                darkMode ? "bg-dark text-white" : ""
-              }`}
-              aria-labelledby="settingsDropdown"
-              style={{ minWidth: "250px" }}
-            >
-              <li>
-                <div
-                  className="dropdown-item"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <NumberInput
-                    label="Base"
-                    value={base}
-                    setValue={setBase}
-                    min={2}
-                    max={6}
-                  />
-                </div>
-              </li>
-              <li>
-                <div
-                  className="dropdown-item"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <ToggleButton
-                    label="Use Base"
-                    value={useBase}
-                    onClick={() => setUseBase(!useBase)}
-                  />
-                </div>
-              </li>
-              <li>
-                <div
-                  className="dropdown-item"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <ToggleButton
-                    label="Left Mult"
-                    value={leftMult}
-                    onClick={() => setLeftMult(!leftMult)}
-                  />
-                </div>
-              </li>
-              <li>
-                <div
-                  className="dropdown-item"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <ToggleButton
-                    label="Right Mult"
-                    value={rightMult}
-                    onClick={() => setRightMult(!rightMult)}
-                  />
-                </div>
-              </li>
-              <li>
-                <div
-                  className="dropdown-item"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <button
-                    className={`${defaultBtnClass} w-100`}
-                    onClick={() => navigate("/home")}
-                  >Go Home</button>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-{/* Multiplayer Section */}
-<div className="mt-2 pe-2">
-  <div className="d-flex w-100">
-    {isMultiplayer ? (
-      // If already in multiplayer, show Leave Room
-      <button
-        className={`${defaultBtnClass} ms-auto`}
-        style={{ width: 220 }}
-        onClick={handleLeaveRoom}
-      >
-        Leave Room
-      </button>
-    ) : !showJoinField ? (
-      // Default state (not in multiplayer, join button)
-      <button
-        className={`${defaultBtnClass} ms-auto`}
-        style={{ width: 220 }}
-        onClick={() => setShowJoinField(true)}
-      >
-        Join Multiplayer Server
-      </button>
-    ) : (
-      // Input + Connect button
-      <div className="d-flex ms-auto gap-2">
-        <input
-          type="text"
-          value={serverCode}
-          onChange={(e) => setServerCode(e.target.value)}
-          placeholder="Enter server address"
-          className="form-control"
-          style={{ width: 220 }}
-        />
-        <button
-          className={defaultBtnClass}
-          onClick={handleJoinServer}
-        >
-          Connect
-        </button>
-      </div>
-    )}
-  </div>
-</div>
-      </div>
-
+    <div className={`d-flex flex-row ${containerClass}`} style={{ height: "100vh" }}>
+      <div className="d-flex flex-column justify-content-between align-items-center flex-grow-1 position-relative">
       {/* Top player's hands (upside down) */}
       <div
         style={{
@@ -593,6 +541,16 @@ const Sticks = () => {
           </button>
         )}
       </div>
+      </div>
+      <GameUI
+        title="Sticks"
+        indicators={gameIndicators}
+        buttons={gameButtons}
+        additionalContent={<>
+          {!isMultiplayer && additionalContent}
+          {multiplayerContent}
+        </>}
+      />
     </div>
   );
 };

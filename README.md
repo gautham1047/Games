@@ -18,14 +18,15 @@ This arcade features a variety of games, each implemented as a separate React co
 
 | Game                    | Description                                         | Features          |
 | ----------------------- | --------------------------------------------------- | ----------------- |
-| **Tic Tac Toe**         | The classic game of noughts and crosses.            | Multiplayer ready |
-| **Ultimate Tic Tac Toe**| A strategic twist on the classic game.              | Single Player     |
 | **Sticks**              | A simple game of strategy. Don't pick the last stick! | Multiplayer ready |
 | **Flappy Bird**         | Endlessly dodge pipes by flapping!                  | Single Player     |
 | **Snake**               | Guide a growing snake and don't die!                | Single Player     |
 | **Minesweeper**         | Find the mines before they find you.                | Single Player     |
 | **2048**                | Combine tiles to reach 2048!                        | Single Player     |
 | **Chess**               | The classic game of strategy and skill.             | Single Player     |
+| **Tic Tac Toe**         | Under Maintainance                                  | Multiplayer ready |
+| **Ultimate Tic Tac Toe**| Under Maintainance                                  | Single Player     |
+
 
 ## ✨ Features
 
@@ -108,5 +109,6 @@ src
 - Add more games to the collection.
 - Add computer bots to play against for games like Chess and Ultimate Tic-Tac-Toe
 - Add unit and integration tests for game logic.
+- Improve UI (and implement more mobile UI since it is currenlty inconsistent)
 
 
